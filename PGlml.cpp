@@ -201,7 +201,7 @@ int main(int argc,char **argv)
 {
   // Usage of the program displayed at the command line
   cimg_usage("Particle parameter Generator of LML");
-  const bool help = cimg_option("-h",false,"Display Help");
+  const bool help = cimg_option("-h",false,"display help");
 //tests
   const bool test_mask = cimg_option("--test-mask",false,"Run and show mask test");
   const bool test_text = cimg_option("--test-text",false,"Run and show text mask test (use also --text)");

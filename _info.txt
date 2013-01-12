@@ -4,4 +4,9 @@ make olinux
 #run
 ./PGlml -h
 ./PGlml -n 12; head -n 2 particle_parameters.cimg
+./PGlml -n 1234 -O true
+
+#run misc.
+./PGlml --test-mask true -P test_mask_positions.png -O true
+./PGlml --test-text true --text 'DG .:.' -P text_positions.png -O true
 
