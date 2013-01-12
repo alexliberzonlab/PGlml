@@ -143,18 +143,20 @@ template<typename T> int create_gaussian_random_parameters(CImg<T> &particles/*g
   ///2D position of the maximum (i.e. particle position)
   coord_x.rand(min_x,max_x);coord_y.rand(min_y,max_y);
   if(!mask.is_empty())
-  {
+  {//check if particle position is in mask
     cimg_forX(coord_x,i)
     {
       int x=(int)coord_x(i);
       int y=(int)coord_y(i);
       if(mask(x,y)==0)
-      {
-        float xf,yf;
+      {//particle position is outside mask
+        float xf=0,yf=0;
         CImg<float> r(1,1,1,1);
-//int d=0;
-        while(mask(x,y)==0) {r.rand(min_x,max_x);xf=r(0);x=(int)r(0);r.rand(min_y,max_y);yf=r(0);y=(int)r(0);}
-//d++;cerr<<d<<" (x,y)=("<<x<<","<<y<<")=("<<xf<<","<<yf<<")"<<endl;}
+        //get new particle position until it is inside mask (note: check also outside image particles)
+        while(mask(x,y)==0
+            ||x<1||x>(int)mask.width-2
+            ||y<1||y>(int)mask.height-2
+            ) {r.rand(min_x,max_x);xf=r(0);x=(int)r(0);r.rand(min_y,max_y);yf=r(0);y=(int)r(0);}
         coord_x(i)=xf;
         coord_y(i)=yf;
       }
@@ -298,5 +300,4 @@ int main(int argc,char **argv)
   }
  return 0;
 }//main
-
 
