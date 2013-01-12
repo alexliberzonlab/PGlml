@@ -2,7 +2,7 @@
 make olinux
 
 #run
-./PGlml -h
+./PGlml -h -I
 ./PGlml -n 12; head -n 2 particle_parameters.cimg
 ./PGlml -n 1234 -O true
 

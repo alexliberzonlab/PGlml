@@ -1,6 +1,6 @@
 v git (use PGlml.cpp code from 12/05/2009 for initial commit using CImg.v1.3.0)
-. misc.: text rendering: outside image removal
+v misc.: text rendering: outside image removal
 _ doxygen
-_ standard -h and -I command line options
+. standard -h and -I command line options
 _ version
 
