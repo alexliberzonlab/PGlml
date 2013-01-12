@@ -1,0 +1,7 @@
+#compilation
+make olinux
+
+#run
+./PGlml -h
+./PGlml -n 12; head -n 2 particle_parameters.cimg
+

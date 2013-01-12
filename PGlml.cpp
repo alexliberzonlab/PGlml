@@ -173,7 +173,7 @@ template<typename T> int create_gaussian_random_parameters(CImg<T> &particles/*g
     particles(i,0,0,LEVEL)=color(i);
   }
   return 0;
-}
+}//create_gaussian_random_parameters
 
 //! draw particle position within the image
 /* create single pixel particles within the image to show position only.
@@ -195,113 +195,7 @@ template<typename imageT, typename T> int draw_particle_position(CImg<imageT> &i
     if( (x>-radius) && x<image.dimx()+radius && (y>-radius) && y<image.dimy()+radius ) image.draw_circle(x,y,radius,&color);
   }
   return 0;
-}
-
-
-
-
-
-
-
-
-
-template<typename T> int create_gaussian_granules_parameters(CImg<T> &particles/*gaussian particles: position x,y; size; level*/,
-/* centre cercle*/ T Xc,T Yc,
-/*position 1*/ T X1,T Y1,
-/*position 2*/ T X2,T Y2,
-/*sigma*/T min_s,T max_s,
- /*illumin*/T min_il,T max_il,
-  /*nb of directions*/int n,
-/*nb min & max by direction */  int n_min,int n_max,
-/*size image*/ int Tx, int Ty
-
-  )
-{
-#define POS_X 0
-#define POS_Y 1
-#define SIGMA 2
-#define LEVEL 3
-
-float teta1,teta2,radius_0;// teta1 angle between an horizontal axe passed by the centre and the axe that joins the centre to P1 
-
-CImg<int> n_radial(n);// nb of particles in radial direction
-
-radius_0=sqrt((X1-Xc)*(X1-Xc)+(Y1-Yc)*(Y1-Yc));
-
-n_radial.rand(n_min,n_max);
-
-int nb_particles=n_radial.sum();
-
-CImg<float> coord_x(nb_particles),coord_y(nb_particles),psigma(nb_particles),color(nb_particles);
-CImg<int> radius(nb_particles),teta(nb_particles);//polar positions 
-
-teta1=atan((Y1-Yc)/(X1-Xc));
-teta2=atan((Y2-Yc)/(X2-Xc));
-
-int k=0
-cimg_forX(n_radial,i)
-{
-	int j=0;
-	while(j<(n_radial(i)-1))
-		{
-	
-	teta(k)=teta1 - i*(teta2-teta1)/n));
-	radius(k)=radius_0 + (j-1)*max_s;
-	k++;
-	j++;
-	}
-
-}
-
-cimg_forX(coord_x,i)
-    {
-      coord_x(i)=Xc+radius(i)*cos(teta(i));
-      coord_y(i)=Yc+radius(i)*sin(teta(i));
-
-	}
-
-  ///sigma of the gaussian curve (i.e. particle size)
-  psigma.rand(min_s,max_s);
-  ///maximum level (i.e. particle brightness)
-  color.rand(min_m,max_m);
-  particles.assign(n,1,1,4);
-  cimg_forX(particles,i)
-  {
-    particles(i,0,0,POS_X)=coord_x(i);
-    particles(i,0,0,POS_Y)=coord_y(i);
-    particles(i,0,0,SIGMA)=psigma(i);
-    particles(i,0,0,LEVEL)=color(i);
-  }
-  return 0;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}//draw_particle_position
 
 int main(int argc,char **argv)
 {
@@ -403,6 +297,6 @@ int main(int argc,char **argv)
 #endif
   }
  return 0;
-}
+}//main
 
 
