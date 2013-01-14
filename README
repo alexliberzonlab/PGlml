@@ -1,0 +1,60 @@
+Particle parameters Generator of the Laboratory of Mechanics in Lille (LML) -part of SIGlml suite-
+
+PGlml is part of Particle Image Velocimetry image generation for
+Particle Generation (i.e. particle parameters such as position, size and brightness).
+Presently, gaussian particle in image space (i.e. 2D) is drawn on both slope background and noisy grey level.
+It is intended to test 2D2C PIV codes.
+For 3D space, see PIVnet SIG at www.meol.cnrs.fr SIG .
+
+SIGlml program suite: PGlml | DGlml | SIGlml
+- PGlml
+- DGlml
+- SIGlml
+
+ex.:
+#PIV generation
+PGlml -o particles.cimg
+##single exposure generation
+DGlml -i particles.cimg -d -0.5 -o particles_1.cimg
+DGlml -i particles.cimg -d +0.5 -o particles_2.cimg
+##double exposure generation
+DGlml -i particles.cimg -d 1 -o particles_1n2.cimg
+##single exposure images
+SIGlml -i particles_1.cimg -o particles_1.png
+SIGlml -i particles_2.cimg -o particles_2.png
+##double exposure image
+SIGlml -i particles_1n2.cimg -o particles_1n2.png
+
+
+PGlml -h
+
+ PGlml: Particle parameter Generator of LML, it uses different GNU libraries (see --info option)
+
+ usage: ./PGlml -h -I #help and compilation information
+        ./PGlml -o gauss_particle_parameters.cimg -s 1.2 -S 2.3 -b 123 -B 234 #random gaussian particle parameterss
+        ./PGlml -n 1234 -O true #show position image
+ usage misc.:
+        ./PGlml --test-mask true -P test_mask_positions.png -O true #default text rendering mode
+        ./PGlml --test-text true --text 'DG .:.' -P text_positions.png -O true #specific text rendering
+ version: v0.0.3	(other library versions: DGlml_parameter_format.v0.0.1:xySB)
+ compilation date:  (Jan 12 2013, 23:21:38)
+
+    --help           true                     help (or -h option)
+    --info           false                    show compilation options (or -I option)
+    --test-mask      false                    Run and show mask test
+    --test-text      false                    Run and show text mask test (use also --text)
+    --text           )                        Render this text as available area for the particles
+    -n               1234                     number of particles
+    -s               1                        minimum value of sigma of gaussian function (i.e. minimum size)
+    -S               2                        maximum value of sigma of gaussian function (i.e. maximum size)
+    -b               200                      minimum value of amplitude of the gaussian function (i.e. minimum brightness)
+    -B               255                      maximum value of amplitude of the gaussian function (i.e. maximum brightness)
+    -o               particle_parameters.cimg file name to output all parameters of the particles
+    -x               -10.5                    width  minimum value of the particle volume
+    -X               521.5                    width  maximum value of the particle volume
+    -y               -10.5                    height minimum value of the particle volume
+    -Y               521.5                    height maximum value of the particle volume
+    -M               0                        image file name of the particle mask (0 no particle, 1 particle area)
+    -O               false                    display position image (e.g. -O true)
+    -P               false                    file name to output positions in an image (e.g. -P positions.png)
+
