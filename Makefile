@@ -44,7 +44,7 @@
 # (name of the source files without the .cpp extension)
 #-------------------------------------------------------
 CIMG_FILES = PGlml
-version = v0.0.3
+version = v0.0.4
 PG_format_version = v0.0.1:xySB
 
 #---------------------------------

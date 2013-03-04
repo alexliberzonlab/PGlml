@@ -242,7 +242,7 @@ version: "+std::string(VERSION)+"\t(other library versions: DGlml_parameter_form
   float height_max= cimg_option("-Y",521.5,"height maximum value of the particle volume");
   ///mask image file name (optional input)
   cimg_help("  ** mask for wall position options");
-  const char* option_mask_filename= cimg_option("-m",(char*)NULL,"image file name of the particle mask (0 no particle, 1 particle area)");
+  const char* option_mask_filename= cimg_option("-m",(char*)NULL,"image file name of the particle mask (0 no particle, 1 particle area; e.g. -m mask.png)");
   const float option_mask_x0=cimg_option("-x0",0.0,"crop mask x position top-left (e.g. 123 nodes)");
   const float option_mask_y0=cimg_option("-y0",0.0,"crop mask y position");
         float option_mask_x1=cimg_option("-x1",-1.0,"crop mask x position bottom-right (e.g. 543 nodes)");

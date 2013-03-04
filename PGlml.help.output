@@ -1,0 +1,45 @@
+
+ [4;31;59mPGlml[0;0;0m : Particle parameter Generator of LML, it uses different GNU libraries (see --info option)
+
+ usage: ./PGlml -h -I #help and compilation information
+        ./PGlml -o gauss_particle_parameters.cimg -s 1.2 -S 2.3 -b 123 -B 234 #random gaussian particle parameters
+        ./PGlml -n 1234 -O true #show position image
+        ./PGlml -m mask.png -n 12345 -O true #use mask
+        ./PGlml -m mask.png -x0 200 -y0 200 -x1 300 -y1 300 -H 512 -W 512 -n 12345 -O true -M cropNscale_mask.png #use mask and crop/scale it
+ usage misc.:
+        ./PGlml --test-mask true -P test_mask_positions.png -O true #default text rendering mode
+        ./PGlml --test-text true --text 'DG .:.' -P text_positions.png -O true #specific text rendering
+ version: v0.0.4	(other library versions: DGlml_parameter_format.v0.0.1:xySB)
+ compilation date:  (Mar  4 2013, 17:01:40)
+
+    [1m--help          [0;0;0m true                     [0;32;59mhelp (or -h option)[0;0;0m
+    [1m--info          [0;0;0m false                    [0;32;59mshow compilation options (or -I option)[0;0;0m
+  * particle options
+    [1m-n              [0;0;0m 1234                     [0;32;59mnumber of particles[0;0;0m
+    [1m-s              [0;0;0m 1                        [0;32;59mminimum value of sigma of gaussian function (i.e. minimum size)[0;0;0m
+    [1m-S              [0;0;0m 2                        [0;32;59mmaximum value of sigma of gaussian function (i.e. maximum size)[0;0;0m
+    [1m-b              [0;0;0m 200                      [0;32;59mminimum value of amplitude of the gaussian function (i.e. minimum brightness)[0;0;0m
+    [1m-B              [0;0;0m 255                      [0;32;59mmaximum value of amplitude of the gaussian function (i.e. maximum brightness)[0;0;0m
+    [1m-o              [0;0;0m particle_parameters.cimg [0;32;59mfile name to output all parameters of the particles[0;0;0m
+  * particle volume size options
+    [1m-x              [0;0;0m -10.5                    [0;32;59mwidth  minimum value of the particle volume[0;0;0m
+    [1m-X              [0;0;0m 521.5                    [0;32;59mwidth  maximum value of the particle volume[0;0;0m
+    [1m-y              [0;0;0m -10.5                    [0;32;59mheight minimum value of the particle volume[0;0;0m
+    [1m-Y              [0;0;0m 521.5                    [0;32;59mheight maximum value of the particle volume[0;0;0m
+  ** mask for wall position options
+    [1m-m              [0;0;0m 0                        [0;32;59mimage file name of the particle mask (0 no particle, 1 particle area; e.g. -m mask.png)[0;0;0m
+    [1m-x0             [0;0;0m 0                        [0;32;59mcrop mask x position top-left (e.g. 123 nodes)[0;0;0m
+    [1m-y0             [0;0;0m 0                        [0;32;59mcrop mask y position[0;0;0m
+    [1m-x1             [0;0;0m -1                       [0;32;59mcrop mask x position bottom-right (e.g. 543 nodes)[0;0;0m
+    [1m-y1             [0;0;0m -1                       [0;32;59mcrop mask y position[0;0;0m
+    [1m-W              [0;0;0m -1                       [0;32;59mcrop mask width (e.g. 512 pixel)[0;0;0m
+    [1m-H              [0;0;0m -1                       [0;32;59mcrop mask height (e.g. 512 pixel)[0;0;0m
+  *** misc. mask options
+    [1m-M              [0;0;0m 0                        [0;32;59mfile name to output mask image (e.g. -M cropNscale_mask.png)[0;0;0m
+  * misc. options
+    [1m-O              [0;0;0m false                    [0;32;59mdisplay position image (e.g. -O true)[0;0;0m
+    [1m-P              [0;0;0m false                    [0;32;59mfile name to output positions in an image (e.g. -P positions.png)[0;0;0m
+  ** test mask options
+    [1m--test-mask     [0;0;0m false                    [0;32;59mRun and show mask test[0;0;0m
+    [1m--test-text     [0;0;0m false                    [0;32;59mRun and show text mask test (use also --text)[0;0;0m
+    [1m--text          [0;0;0m )                        [0;32;59mRender this text as available area for the particles[0;0;0m
