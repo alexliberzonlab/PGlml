@@ -126,12 +126,13 @@ using namespace std;
  * \param[in] max_m: maximum of the particle gray level range
  * \param[in|optional] mask: mask for particle area (i.e. 0 no particle, 1 available area for particles)
 **/
-template<typename T> int create_gaussian_random_parameters(CImg<T> &particles/*gaussian particles: position x,y; size; level*/,
+template<typename T,typename Tmask>
+int create_gaussian_random_parameters(CImg<T> &particles/*gaussian particles: position x,y; size; level*/,
   /*number*/int n,
   /*positions*/T min_x,T max_x,T min_y,T max_y,
   /*sigma*/T min_s,T max_s,
   /*maximum*/T min_m,T max_m,
-  /*mask for particle area*/CImg<float> &mask
+  /*mask for particle area*/CImg<Tmask> &mask
   )
 {
 #define POS_X 0
@@ -148,14 +149,15 @@ template<typename T> int create_gaussian_random_parameters(CImg<T> &particles/*g
     {
       int x=(int)coord_x(i);
       int y=(int)coord_y(i);
+      if(x<0||y<0||x>mask.width-1||y>mask.height-1) continue;
       if(mask(x,y)==0)
       {//particle position is outside mask
         float xf=0,yf=0;
         CImg<float> r(1,1,1,1);
         //get new particle position until it is inside mask (note: check also outside image particles)
-        while(mask(x,y)==0
-            ||x<1||x>(int)mask.width-2
-            ||y<1||y>(int)mask.height-2
+        while(x<0||x>(int)mask.width-1
+            ||y<0||y>(int)mask.height-1
+            ||mask(x,y)==0
             ) {r.rand(min_x,max_x);xf=r(0);x=(int)r(0);r.rand(min_y,max_y);yf=r(0);y=(int)r(0);}
         coord_x(i)=xf;
         coord_y(i)=yf;
@@ -253,7 +255,7 @@ version: "+std::string(VERSION)+"\t(other library versions: DGlml_parameter_form
 ///create parameter array
   CImg<float> particles;
 ///create mask (optional)
-  CImg<float> mask;
+  CImg<int> mask;
   unsigned int size_x,size_y;
   float zoom,color,background;
 ////mask test assign
@@ -261,7 +263,7 @@ version: "+std::string(VERSION)+"\t(other library versions: DGlml_parameter_form
   {
     size_x=(unsigned int)(width_max+width_min+1);size_y=(unsigned int)(height_max+height_min+1);
     zoom=400,color=1,background=0;
-    mask.assign((int)(size_x*100/zoom),(int)(size_y*100/zoom),1,1);
+    mask.assign((int)(size_x*100/zoom),(int)(size_y*100/zoom),1,1,0);
   }
 ////default mask test
   if(test_mask)
