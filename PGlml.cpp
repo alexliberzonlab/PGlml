@@ -149,14 +149,13 @@ int create_gaussian_random_parameters(CImg<T> &particles/*gaussian particles: po
     {
       int x=(int)coord_x(i);
       int y=(int)coord_y(i);
-      if(x<0||y<0||x>mask.width-1||y>mask.height-1) continue;
+      if(!mask.containsXYZV(x,y)) continue;
       if(mask(x,y)==0)
       {//particle position is outside mask
         float xf=0,yf=0;
         CImg<float> r(1,1,1,1);
         //get new particle position until it is inside mask (note: check also outside image particles)
-        while(x<0||x>(int)mask.width-1
-            ||y<0||y>(int)mask.height-1
+        while(!mask.containsXYZV(x,y)
             ||mask(x,y)==0
             ) {r.rand(min_x,max_x);xf=r(0);x=(int)r(0);r.rand(min_y,max_y);yf=r(0);y=(int)r(0);}
         coord_x(i)=xf;
