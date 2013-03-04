@@ -243,6 +243,10 @@ version: "+std::string(VERSION)+"\t(other library versions: DGlml_parameter_form
   float height_max= cimg_option("-Y",521.5,"height maximum value of the particle volume");
   ///mask image file name (optional input)
   const char* option_mask_filename= cimg_option("-M",(char*)NULL,"image file name of the particle mask (0 no particle, 1 particle area)");
+  const float option_mask_x0= cimg_option("-x0",0.0,"crop mask x position top-left");
+  const float option_mask_y0= cimg_option("-y0",0.0,"crop mask y position");
+        float option_mask_x1= cimg_option("-x1",-1.0,"crop mask x position bottom-right");
+        float option_mask_y1= cimg_option("-y1",-1.0,"crop mask y position");
 //image
   ///position image file name (optional output)
   const bool option_image=cimg_option("-O",false,"display position image (e.g. -O true)");
@@ -283,7 +287,14 @@ version: "+std::string(VERSION)+"\t(other library versions: DGlml_parameter_form
     mask.resize((int)-zoom,(int)-zoom);
   }
 ////user mask (from image file)
-  if(option_mask_filename!=NULL) mask.load(option_mask_filename);
+  if(option_mask_filename!=NULL)
+  {
+    mask.load(option_mask_filename);
+    //crop mask if need extraction from a bigger map
+    if(option_mask_x1==-1) option_mask_x1=mask.width-1;
+    if(option_mask_y1==-1) option_mask_y1=mask.height-1;
+    mask.crop(option_mask_x0,option_mask_y0,option_mask_x1,option_mask_y1);
+  }
 #if cimg_debug>1
   if(mask.is_empty()) cerr<<"Information: no particle mask used"<<endl; else mask.display("particle mask PGlml");
 #endif
