@@ -209,8 +209,8 @@ it uses different GNU libraries (see --info option)\n\n \
 usage: ./PGlml -h -I #help and compilation information\n \
        ./PGlml -o gauss_particle_parameters.cimg -s 1.2 -S 2.3 -b 123 -B 234 #random gaussian particle parameters\n \
        ./PGlml -n 1234 -O true #show position image\n \
-       ./PGlml -M mask.png -n 12345 -O true #use mask\n \
-       ./PGlml -M mask.png -x0 200 -y0 200 -x1 300 -y1 300 -H 512 -W 512 -n 12345 -O true #use mask and crop/scale it\n \
+       ./PGlml -m mask.png -n 12345 -O true #use mask\n \
+       ./PGlml -m mask.png -x0 200 -y0 200 -x1 300 -y1 300 -H 512 -W 512 -n 12345 -O true -M cropNscale_mask.png #use mask and crop/scale it\n \
 usage misc.:\n \
        ./PGlml --test-mask true -P test_mask_positions.png -O true #default text rendering mode\n \
        ./PGlml --test-text true --text 'DG .:.' -P text_positions.png -O true #specific text rendering\n \
@@ -242,13 +242,16 @@ version: "+std::string(VERSION)+"\t(other library versions: DGlml_parameter_form
   float height_max= cimg_option("-Y",521.5,"height maximum value of the particle volume");
   ///mask image file name (optional input)
   cimg_help("  ** mask for wall position options");
-  const char* option_mask_filename= cimg_option("-M",(char*)NULL,"image file name of the particle mask (0 no particle, 1 particle area)");
+  const char* option_mask_filename= cimg_option("-m",(char*)NULL,"image file name of the particle mask (0 no particle, 1 particle area)");
   const float option_mask_x0=cimg_option("-x0",0.0,"crop mask x position top-left (e.g. 123 nodes)");
   const float option_mask_y0=cimg_option("-y0",0.0,"crop mask y position");
         float option_mask_x1=cimg_option("-x1",-1.0,"crop mask x position bottom-right (e.g. 543 nodes)");
         float option_mask_y1=cimg_option("-y1",-1.0,"crop mask y position");
   const int option_mask_width= cimg_option("-W",-1,"crop mask width (e.g. 512 pixel)");
   const int option_mask_height=cimg_option("-H",-1,"crop mask height (e.g. 512 pixel)");
+  cimg_help("  *** misc. mask options");
+  ///mask image file name (optional output)
+  const char* option_output_mask_filename=cimg_option("-M",(char*)NULL,"file name to output mask image (e.g. -M cropNscale_mask.png)");
 //image
   cimg_help("  * misc. options");
   ///position image file name (optional output)
@@ -307,6 +310,7 @@ version: "+std::string(VERSION)+"\t(other library versions: DGlml_parameter_form
       std::cerr<<"information: mask scale is NOT changed.\n";
     else
       mask.resize(option_mask_width,option_mask_height);
+    if(option_output_mask_filename!=NULL) mask.save(option_output_mask_filename);
   }
 #if cimg_debug>1
   if(mask.is_empty()) cerr<<"information: no particle mask used"<<endl; else mask.display("particle mask PGlml");
