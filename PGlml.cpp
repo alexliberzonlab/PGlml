@@ -209,6 +209,7 @@ it uses different GNU libraries (see --info option)\n\n \
 usage: ./PGlml -h -I #help and compilation information\n \
        ./PGlml -o gauss_particle_parameters.cimg -s 1.2 -S 2.3 -b 123 -B 234 #random gaussian particle parameters\n \
        ./PGlml -n 1234 -O true #show position image\n \
+       ./PGlml -M mask.png -n 12345 -O true\n \
 usage misc.:\n \
        ./PGlml --test-mask true -P test_mask_positions.png -O true #default text rendering mode\n \
        ./PGlml --test-text true --text 'DG .:.' -P text_positions.png -O true #specific text rendering\n \
