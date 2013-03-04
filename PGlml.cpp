@@ -209,7 +209,8 @@ it uses different GNU libraries (see --info option)\n\n \
 usage: ./PGlml -h -I #help and compilation information\n \
        ./PGlml -o gauss_particle_parameters.cimg -s 1.2 -S 2.3 -b 123 -B 234 #random gaussian particle parameters\n \
        ./PGlml -n 1234 -O true #show position image\n \
-       ./PGlml -M mask.png -n 12345 -O true\n \
+       ./PGlml -M mask.png -n 12345 -O true #use mask\n \
+       ./PGlml -M mask.png -x0 200 -y0 200 -x1 300 -y1 300 -H 512 -W 512 -n 12345 -O true #use mask and crop/scale it\n \
 usage misc.:\n \
        ./PGlml --test-mask true -P test_mask_positions.png -O true #default text rendering mode\n \
        ./PGlml --test-text true --text 'DG .:.' -P text_positions.png -O true #specific text rendering\n \
@@ -220,11 +221,8 @@ version: "+std::string(VERSION)+"\t(other library versions: DGlml_parameter_form
         bool show_help=cimg_option("--help",show_h,"help (or -h option)");show_help=show_h|show_help;//same --help or -h option
   bool show_info=cimg_option("-I",false,NULL);//-I hidden option
   if( cimg_option("--info",show_info,"show compilation options (or -I option)") ) {show_info=true;cimg_library::cimg::info();}//same --info or -I option  // Usage of the program displayed at the command line
-//tests
-  const bool test_mask = cimg_option("--test-mask",false,"Run and show mask test");
-  const bool test_text = cimg_option("--test-text",false,"Run and show text mask test (use also --text)");
-  const char* option_text= cimg_option("--text",")","Render this text as available area for the particles");
 //particles
+  cimg_help("  * particle options");
   ///particle number
   int nbParticles= cimg_option("-n",1234,"number of particles");
   ///particle size
@@ -237,21 +235,31 @@ version: "+std::string(VERSION)+"\t(other library versions: DGlml_parameter_form
   const char* filename= cimg_option("-o","particle_parameters.cimg","file name to output all parameters of the particles");
 //volume
   ///volume size
+  cimg_help("  * particle volume size options");
   float width_min = cimg_option("-x",-10.5,"width  minimum value of the particle volume");
   float width_max = cimg_option("-X",521.5,"width  maximum value of the particle volume");
   float height_min= cimg_option("-y",-10.5,"height minimum value of the particle volume");
   float height_max= cimg_option("-Y",521.5,"height maximum value of the particle volume");
   ///mask image file name (optional input)
+  cimg_help("  ** mask for wall position options");
   const char* option_mask_filename= cimg_option("-M",(char*)NULL,"image file name of the particle mask (0 no particle, 1 particle area)");
-  const float option_mask_x0= cimg_option("-x0",0.0,"crop mask x position top-left");
-  const float option_mask_y0= cimg_option("-y0",0.0,"crop mask y position");
-        float option_mask_x1= cimg_option("-x1",-1.0,"crop mask x position bottom-right");
-        float option_mask_y1= cimg_option("-y1",-1.0,"crop mask y position");
+  const float option_mask_x0=cimg_option("-x0",0.0,"crop mask x position top-left (e.g. 123 nodes)");
+  const float option_mask_y0=cimg_option("-y0",0.0,"crop mask y position");
+        float option_mask_x1=cimg_option("-x1",-1.0,"crop mask x position bottom-right (e.g. 543 nodes)");
+        float option_mask_y1=cimg_option("-y1",-1.0,"crop mask y position");
+  const int option_mask_width= cimg_option("-W",-1,"crop mask width (e.g. 512 pixel)");
+  const int option_mask_height=cimg_option("-H",-1,"crop mask height (e.g. 512 pixel)");
 //image
+  cimg_help("  * misc. options");
   ///position image file name (optional output)
   const bool option_image=cimg_option("-O",false,"display position image (e.g. -O true)");
   const char* option_image_filename=cimg_option("-P","false","file name to output positions in an image (e.g. -P positions.png)");
   const bool option_image_file=cimg::strcmp(option_image_filename,"false");
+//tests
+  cimg_help("  ** test mask options");
+  const bool test_mask = cimg_option("--test-mask",false,"Run and show mask test");
+  const bool test_text = cimg_option("--test-text",false,"Run and show text mask test (use also --text)");
+  const char* option_text= cimg_option("--text",")","Render this text as available area for the particles");
   ///stop if help requested
   if(show_help) {/*print_help(std::cerr);*/return 0;}
 
@@ -294,9 +302,14 @@ version: "+std::string(VERSION)+"\t(other library versions: DGlml_parameter_form
     if(option_mask_x1==-1) option_mask_x1=mask.width-1;
     if(option_mask_y1==-1) option_mask_y1=mask.height-1;
     mask.crop(option_mask_x0,option_mask_y0,option_mask_x1,option_mask_y1);
+    //resize
+    if(option_mask_width<0||option_mask_height<0)
+      std::cerr<<"information: mask scale is NOT changed.\n";
+    else
+      mask.resize(option_mask_width,option_mask_height);
   }
 #if cimg_debug>1
-  if(mask.is_empty()) cerr<<"Information: no particle mask used"<<endl; else mask.display("particle mask PGlml");
+  if(mask.is_empty()) cerr<<"information: no particle mask used"<<endl; else mask.display("particle mask PGlml");
 #endif
 ///create parameters
   create_gaussian_random_parameters(particles,nbParticles,
@@ -314,7 +327,11 @@ version: "+std::string(VERSION)+"\t(other library versions: DGlml_parameter_form
   if(option_image||option_image_file)
   {
   //create image
-    unsigned int size_x=(unsigned int)(width_max+width_min+1),size_y=(unsigned int)(height_max+height_min+1);
+    unsigned int size_x,size_y;
+    if(option_mask_width<0)  {size_x=(unsigned int)(width_max+width_min+1);  std::cerr<<"information: image width  for optional output set to "<<size_x<<" pixel.\n";}
+    else size_x=option_mask_width;
+    if(option_mask_height<0) {size_y=(unsigned int)(height_max+height_min+1);std::cerr<<"information: image height for optional output set to "<<size_y<<" pixel.\n";}
+    else size_y=option_mask_height;
     CImg<unsigned char> image(size_x,size_y,1);
   //draw particles within the image
     draw_particle_position(image,particles);
