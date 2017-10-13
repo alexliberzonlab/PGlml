@@ -92,8 +92,8 @@ a> for the whole program
 
 //debug display (0- quiet, 1- only final image (and only if -O true), 2- image step by step)
 //#define pglml_debug 0
-//#define pglml_debug 1
-#define pglml_debug 2
+#define pglml_debug 1
+//#define pglml_debug 2
 #include "../CImg/CImg.h"
 
 using namespace cimg_library;
