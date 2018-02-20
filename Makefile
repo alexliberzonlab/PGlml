@@ -50,9 +50,9 @@ PG_format_version = v0.0.1:xySB
 #---------------------------------
 # Set correct variables and paths
 #---------------------------------
-CIMG_VERSION = 1.30
-X11PATH      = /usr/X11R6
-CC           = g++
+CIMG_VERSION = 2.2.0
+X11PATH      = /opt/X11
+CC           = /usr/bin/g++
 CCVER        = `$(CC) -v 2>&1 | tail -n 1`
 EXEPFX       =
 
