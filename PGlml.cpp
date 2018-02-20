@@ -92,8 +92,8 @@ a> for the whole program
 
 //debug display (0- quiet, 1- only final image (and only if -O true), 2- image step by step)
 //#define pglml_debug 0
-#define pglml_debug 1
-//#define pglml_debug 2
+//#define pglml_debug 1
+#define pglml_debug 2
 #include "../CImg/CImg.h"
 
 using namespace cimg_library;
@@ -149,13 +149,13 @@ int create_gaussian_random_parameters(CImg<T> &particles/*gaussian particles: po
     {
       int x=(int)coord_x(i);
       int y=(int)coord_y(i);
-      if(!mask.containsXYZV(x,y)) continue;
+      if(!mask.containsXYZC(x,y)) continue;
       if(mask(x,y)==0)
       {//particle position is outside mask
         float xf=0,yf=0;
         CImg<float> r(1,1,1,1);
         //get new particle position until it is inside mask (note: check also outside image particles)
-        while(!mask.containsXYZV(x,y)
+        while(!mask.containsXYZC(x,y)
             ||mask(x,y)==0
             ) {r.rand(min_x,max_x);xf=r(0);x=(int)r(0);r.rand(min_y,max_y);yf=r(0);y=(int)r(0);}
         coord_x(i)=xf;
@@ -195,7 +195,7 @@ template<typename imageT, typename T> int draw_particle_position(CImg<imageT> &i
   {
     int x=(int)particles(i,0,0,POS_X);
     int y=(int)particles(i,0,0,POS_Y);
-    if( (x>-radius) && x<image.dimx()+radius && (y>-radius) && y<image.dimy()+radius ) image.draw_circle(x,y,radius,&color);
+    if( (x>-radius) && x<image.width()+radius && (y>-radius) && y<image.height()+radius ) image.draw_circle(x,y,radius,&color);
   }
   return 0;
 }//draw_particle_position
@@ -214,7 +214,7 @@ usage: ./PGlml -h -I #help and compilation information\n \
 usage misc.:\n \
        ./PGlml --test-mask true -P test_mask_positions.png -O true #default text rendering mode\n \
        ./PGlml --test-text true --text 'DG .:.' -P text_positions.png -O true #specific text rendering\n \
-version: "+std::string(VERSION)+"\t(other library versions: DGlml_parameter_format."+std::string(PG_FORMAT_VERSION)+")\n compilation date: " \
+version: +\t(other library versions: DGlml_parameter_format.)\n compilation date: " \
             ).c_str());//cimg_usage
   ///information and help
   const bool show_h   =cimg_option("-h",    false,NULL);//-h hidden option
@@ -257,7 +257,7 @@ version: "+std::string(VERSION)+"\t(other library versions: DGlml_parameter_form
   ///position image file name (optional output)
   const bool option_image=cimg_option("-O",false,"display position image (e.g. -O true)");
   const char* option_image_filename=cimg_option("-P","false","file name to output positions in an image (e.g. -P positions.png)");
-  const bool option_image_file=cimg::strcmp(option_image_filename,"false");
+  const bool option_image_file=strcmp(option_image_filename,"false");
 //tests
   cimg_help("  ** test mask options");
   const bool test_mask = cimg_option("--test-mask",false,"Run and show mask test");
@@ -302,8 +302,8 @@ version: "+std::string(VERSION)+"\t(other library versions: DGlml_parameter_form
   {
     mask.load(option_mask_filename);
     //crop mask if need extraction from a bigger map
-    if(option_mask_x1==-1) option_mask_x1=mask.width-1;
-    if(option_mask_y1==-1) option_mask_y1=mask.height-1;
+    if(option_mask_x1==-1) option_mask_x1=mask.width()-1;
+    if(option_mask_y1==-1) option_mask_y1=mask.height()-1;
     mask.crop(option_mask_x0,option_mask_y0,option_mask_x1,option_mask_y1);
     //resize
     if(option_mask_width<0||option_mask_height<0)

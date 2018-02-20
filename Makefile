@@ -52,7 +52,7 @@ PG_format_version = v0.0.1:xySB
 #---------------------------------
 CIMG_VERSION = 2.2.0
 X11PATH      = /opt/X11
-CC           = /usr/bin/g++
+CC           = clang++
 CCVER        = `$(CC) -v 2>&1 | tail -n 1`
 EXEPFX       =
 
