@@ -90,10 +90,10 @@ a> for the whole program
 
 #include<iostream>
 
-//debug display (0- quiet, 1- only final image, 2- image step by step)
-//#define cimg_debug 0
-//#define cimg_debug 1
-#define cimg_debug 2
+//debug display (0- quiet, 1- only final image (and only if -O true), 2- image step by step)
+//#define pglml_debug 0
+#define pglml_debug 1
+//#define pglml_debug 2
 #include "../CImg/CImg.h"
 
 using namespace cimg_library;
@@ -312,7 +312,7 @@ version: "+std::string(VERSION)+"\t(other library versions: DGlml_parameter_form
       mask.resize(option_mask_width,option_mask_height);
     if(option_output_mask_filename!=NULL) mask.save(option_output_mask_filename);
   }
-#if cimg_debug>1
+#if pglml_debug>1
   if(mask.is_empty()) cerr<<"information: no particle mask used"<<endl; else mask.display("particle mask PGlml");
 #endif
 ///create parameters
@@ -323,7 +323,7 @@ version: "+std::string(VERSION)+"\t(other library versions: DGlml_parameter_form
     mask);
 ///save parameters
   particles.save(filename);
-#if cimg_debug>1
+#if pglml_debug>1
     particles.display("particle parameters PGlml");
 #endif
 
@@ -342,7 +342,7 @@ version: "+std::string(VERSION)+"\t(other library versions: DGlml_parameter_form
   //save
   ///08bit
     if(option_image_file) image.save(option_image_filename);
-#if cimg_debug>0
+#if pglml_debug>0
     if(option_image) image.display("particle position only PGlml");
 #endif
   }
