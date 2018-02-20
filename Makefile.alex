@@ -1,0 +1,1 @@
+clang++ -I .. -I /opt/X11/include PGlml.cpp -L /opt/X11/lib -lX11 -o PGlml
